@@ -6,6 +6,13 @@ import { z } from "zod";
 import { generateRecommendation } from "./ai-service";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Initialize database and seed with initial data if needed
+  try {
+    await storage.initializeDatabase();
+    console.log("Database initialization completed successfully.");
+  } catch (error) {
+    console.error("Error initializing database:", error);
+  }
   // Compare API endpoint
   app.post("/api/compare", async (req, res) => {
     try {

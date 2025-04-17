@@ -1,6 +1,8 @@
-import { CompareRequest, LogisticsProvider } from "@shared/schema";
+import { CompareRequest, LogisticsProvider, logisticsProviders } from "@shared/schema";
+import { db } from "./db";
+import { eq, ilike, and, lt } from "drizzle-orm";
 
-// HARDCODED DATASET OF LOGISTICS PROVIDERS
+// Sample logistics data for database seeding
 const LOGISTICS_DATA: LogisticsProvider[] = [
   {
     id: 1,
@@ -38,7 +40,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     maxDays: 5,
     serviceType: "Standard Delivery",
     description: "Economical shipping option with wide coverage across India",
-    hasInsurance: false
+    hasInsurance: false,
+    insuranceType: ""
   },
   {
     id: 4,
@@ -63,7 +66,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     maxDays: 4,
     serviceType: "Standard Delivery",
     description: "Cost-effective delivery solution with good coverage in tier 2 and 3 cities",
-    hasInsurance: false
+    hasInsurance: false,
+    insuranceType: ""
   },
   {
     id: 6,
@@ -112,17 +116,27 @@ export interface IStorage {
     sortBy?: string,
     filterProvider?: string
   ): Promise<LogisticsProvider[]>;
+  initializeDatabase(): Promise<void>;
 }
 
-export class MemStorage implements IStorage {
-  private providers: LogisticsProvider[];
-
-  constructor() {
-    this.providers = [...LOGISTICS_DATA];
+export class DatabaseStorage implements IStorage {
+  async initializeDatabase(): Promise<void> {
+    // Check if we already have data in the database
+    const existingProviders = await db.select().from(logisticsProviders);
+    
+    // Only seed if there's no data
+    if (existingProviders.length === 0) {
+      console.log("Seeding database with initial logistics providers data...");
+      // Insert the sample data
+      await db.insert(logisticsProviders).values(LOGISTICS_DATA);
+      console.log("Database seeding complete.");
+    } else {
+      console.log(`Database already contains ${existingProviders.length} providers.`);
+    }
   }
 
   async getAllProviders(): Promise<LogisticsProvider[]> {
-    return this.providers;
+    return await db.select().from(logisticsProviders);
   }
 
   async compareOptions(
@@ -130,9 +144,11 @@ export class MemStorage implements IStorage {
     sortBy: string = "price_low",
     filterProvider: string = "all"
   ): Promise<LogisticsProvider[]> {
-    // Apply a basic pricing algorithm based on weight and distance
-    // In a real app, this would be a more complex calculation
-    let results = this.providers.map(provider => {
+    // First, get all providers
+    let providers = await this.getAllProviders();
+    
+    // Apply the same pricing algorithm as before
+    let results = providers.map(provider => {
       // Make a copy of the provider to modify
       const modifiedProvider = { ...provider };
 
@@ -141,7 +157,7 @@ export class MemStorage implements IStorage {
         ? compareRequest.weight / 1000 
         : compareRequest.weight;
       
-      // Base price from the hardcoded data
+      // Base price from the database
       let adjustedPrice = modifiedProvider.price;
       
       // Add 50 rupees per kg above 1kg
@@ -213,4 +229,4 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

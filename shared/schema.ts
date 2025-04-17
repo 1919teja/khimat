@@ -14,7 +14,7 @@ export const logisticsProviders = pgTable("logistics_providers", {
   serviceType: text("service_type").notNull(),
   description: text("description").notNull(),
   hasInsurance: boolean("has_insurance").default(false),
-  insuranceType: text("insurance_type"),
+  insuranceType: text("insurance_type").notNull().default(""),
 });
 
 // Compare Request Schema
