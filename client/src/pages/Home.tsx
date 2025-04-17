@@ -46,7 +46,7 @@ export default function Home() {
     <div className="bg-gray-50 min-h-screen flex flex-col">
       <Header />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow">
-        <div className="mb-6 p-4 bg-gradient-to-r from-red-900 to-black rounded-lg shadow-lg border border-red-800">
+        <div className="mb-6 p-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg shadow-lg border border-purple-400">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="mb-4 md:mb-0">
               <h2 className="text-xl font-bold text-white mb-2">Join Our Logistics Network</h2>
