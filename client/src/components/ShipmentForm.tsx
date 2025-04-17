@@ -5,23 +5,50 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 // Hardcoded cities for autocomplete
-const cities: City[] = [
-  { name: "Mumbai", state: "Maharashtra" },
-  { name: "Delhi", state: "Delhi" },
-  { name: "Bangalore", state: "Karnataka" },
-  { name: "Hyderabad", state: "Telangana" },
-  { name: "Chennai", state: "Tamil Nadu" },
-  { name: "Kolkata", state: "West Bengal" },
-  { name: "Pune", state: "Maharashtra" },
-  { name: "Ahmedabad", state: "Gujarat" },
-  { name: "Jaipur", state: "Rajasthan" },
-  { name: "Surat", state: "Gujarat" },
-  { name: "Lucknow", state: "Uttar Pradesh" },
-  { name: "Kanpur", state: "Uttar Pradesh" },
-  { name: "Nagpur", state: "Maharashtra" },
-  { name: "Indore", state: "Madhya Pradesh" },
-  { name: "Thane", state: "Maharashtra" }
+const indianCities: City[] = [
+  { name: "Mumbai", state: "Maharashtra, India" },
+  { name: "Delhi", state: "Delhi, India" },
+  { name: "Bangalore", state: "Karnataka, India" },
+  { name: "Hyderabad", state: "Telangana, India" },
+  { name: "Chennai", state: "Tamil Nadu, India" },
+  { name: "Kolkata", state: "West Bengal, India" },
+  { name: "Pune", state: "Maharashtra, India" },
+  { name: "Ahmedabad", state: "Gujarat, India" },
+  { name: "Jaipur", state: "Rajasthan, India" },
+  { name: "Surat", state: "Gujarat, India" },
+  { name: "Lucknow", state: "Uttar Pradesh, India" },
+  { name: "Kanpur", state: "Uttar Pradesh, India" },
+  { name: "Nagpur", state: "Maharashtra, India" },
+  { name: "Indore", state: "Madhya Pradesh, India" },
+  { name: "Thane", state: "Maharashtra, India" }
 ];
+
+// International cities for autocomplete
+const internationalCities: City[] = [
+  { name: "New York", state: "NY, USA" },
+  { name: "Los Angeles", state: "CA, USA" },
+  { name: "Chicago", state: "IL, USA" },
+  { name: "Houston", state: "TX, USA" },
+  { name: "London", state: "UK" },
+  { name: "Paris", state: "France" },
+  { name: "Berlin", state: "Germany" },
+  { name: "Tokyo", state: "Japan" },
+  { name: "Sydney", state: "Australia" },
+  { name: "Singapore", state: "Singapore" },
+  { name: "Dubai", state: "UAE" },
+  { name: "Toronto", state: "Canada" },
+  { name: "Vancouver", state: "Canada" },
+  { name: "Shanghai", state: "China" },
+  { name: "Hong Kong", state: "China" },
+  { name: "Bangkok", state: "Thailand" },
+  { name: "Kuala Lumpur", state: "Malaysia" },
+  { name: "Seoul", state: "South Korea" },
+  { name: "Amsterdam", state: "Netherlands" },
+  { name: "Madrid", state: "Spain" }
+];
+
+// Combine all cities
+const cities: City[] = [...indianCities, ...internationalCities];
 
 interface ShipmentFormProps {
   onCompare: (formData: ShipmentFormData) => void;
@@ -194,9 +221,14 @@ export default function ShipmentForm({ onCompare }: ShipmentFormProps) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Services</SelectItem>
-                  <SelectItem value="standard">Standard</SelectItem>
-                  <SelectItem value="express">Express</SelectItem>
-                  <SelectItem value="premium">Premium</SelectItem>
+                  {/* Domestic Services */}
+                  <SelectItem value="standard">Standard Delivery</SelectItem>
+                  <SelectItem value="express">Express Delivery</SelectItem>
+                  <SelectItem value="premium">Premium Delivery</SelectItem>
+                  {/* International Services */}
+                  <SelectItem value="international">International Standard</SelectItem>
+                  <SelectItem value="international_express">International Express</SelectItem>
+                  <SelectItem value="international_priority">International Priority</SelectItem>
                 </SelectContent>
               </Select>
             </div>
