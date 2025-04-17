@@ -18,6 +18,7 @@ export default function Home() {
     sortResults,
     filterResults,
     refreshRecommendation,
+    getRecommendedOption,
     selectedSort,
     selectedFilter,
     showResults,
@@ -29,8 +30,15 @@ export default function Home() {
   const handleSelectRecommended = () => {
     if (aiRecommendation && aiRecommendation.bestOption) {
       setSelectedOptionId(aiRecommendation.bestOption.id);
-      // You can add additional logic here for handling the selection
-      // For example, scrolling to the option or highlighting it
+      
+      // Scroll to the results section
+      const resultsSection = document.getElementById('results-section');
+      if (resultsSection) {
+        window.scrollTo({
+          top: resultsSection.offsetTop + 100, // Scroll a bit further down to see the recommended option
+          behavior: 'smooth'
+        });
+      }
     }
   };
 
@@ -40,8 +48,9 @@ export default function Home() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow">
         <Hero />
         <ShipmentForm onCompare={submitCompare} />
+        
         {showResults && (
-          <>
+          <div id="results-area">
             {/* AI Recommendation Section */}
             {isLoadingRecommendation && <AIRecommendationSkeleton />}
             
@@ -54,16 +63,18 @@ export default function Home() {
             )}
             
             {/* Results Section */}
-            <ResultsSection
-              results={compareResults}
-              isLoading={isLoading}
-              onSort={sortResults}
-              onFilter={filterResults}
-              selectedSort={selectedSort}
-              selectedFilter={selectedFilter}
-              selectedOptionId={selectedOptionId}
-            />
-          </>
+            <div id="results-section">
+              <ResultsSection
+                results={compareResults}
+                isLoading={isLoading}
+                onSort={sortResults}
+                onFilter={filterResults}
+                selectedSort={selectedSort}
+                selectedFilter={selectedFilter}
+                selectedOptionId={selectedOptionId}
+              />
+            </div>
+          </div>
         )}
       </main>
       <Footer />
