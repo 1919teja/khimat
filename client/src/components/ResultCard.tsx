@@ -1,19 +1,6 @@
 import { LogisticsOption } from '@/types';
 import { Button } from '@/components/ui/button';
 
-// Placeholder component - replace with actual implementation
-const ShipmentSelection = ({ provider }: { provider: any }) => {
-  return (
-    <div>
-      {/* Add your shipment selection logic here */}
-      <select>
-        <option value="option1">Option 1</option>
-        <option value="option2">Option 2</option>
-      </select>
-    </div>
-  );
-};
-
 interface ResultCardProps {
   option: LogisticsOption;
   isBestValue: boolean;
@@ -54,14 +41,14 @@ export default function ResultCard({ option, isBestValue, isRecommended = false 
           BEST VALUE
         </div>
       )}
-
+      
       <div className="p-4 md:p-6">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
           {/* Logo Area */}
           <div className="flex-shrink-0 w-24 h-12 bg-gray-50 rounded-md flex items-center justify-center p-2">
             <img src={option.logoUrl} alt={option.name} className="max-w-full max-h-full object-contain" />
           </div>
-
+          
           {/* Details Area */}
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-gray-800">{option.name}</h3>
@@ -80,29 +67,23 @@ export default function ResultCard({ option, isBestValue, isRecommended = false 
             </div>
             <p className="text-sm text-gray-500 mt-2">{option.description}</p>
           </div>
-
+          
           {/* Price & Action Area */}
           <div className="w-full md:w-auto flex flex-col items-start md:items-end mt-3 md:mt-0">
             <div className="text-2xl font-bold text-gray-800">₹{option.price}</div>
             <div className="text-xs text-gray-500 mb-3">incl. all taxes</div>
-            <div className="flex justify-between items-center mt-4">
-              <Button 
-                variant={isRecommended || isBestValue ? "default" : "outline"} 
-                className={`${
-                  isRecommended 
-                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md' 
-                    : isBestValue 
-                      ? 'bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white shadow-md' 
-                      : 'bg-white hover:bg-gray-50 text-primary border border-primary'
-                } font-medium py-2 px-6 rounded-lg transition duration-150 ease-in-out w-full md:w-auto`}
-              >
-                {isRecommended ? 'Select Recommended' : 'Select'}
-              </Button>
-              <ShipmentSelection provider={option.provider} /> {/* Added ShipmentSelection here */}
-              {isRecommended && (
-                <div className="text-green-600 font-semibold">Recommended</div>
-              )}
-            </div>
+            <Button 
+              variant={isRecommended || isBestValue ? "default" : "outline"} 
+              className={`${
+                isRecommended 
+                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md' 
+                  : isBestValue 
+                    ? 'bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white shadow-md' 
+                    : 'bg-white hover:bg-gray-50 text-primary border border-primary'
+              } font-medium py-2 px-6 rounded-lg transition duration-150 ease-in-out w-full md:w-auto`}
+            >
+              {isRecommended ? 'Select Recommended' : 'Select'}
+            </Button>
           </div>
         </div>
       </div>

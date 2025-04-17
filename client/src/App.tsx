@@ -19,7 +19,6 @@ function Router() {
       <Route path="/how-it-works" component={HowItWorks} />
       <Route path="/signin" component={SignIn} />
       <Route path="/signup" component={SignUp} />
-      <Route path="/shipment" component={Shipment} />
       <Route component={NotFound} />
     </Switch>
   );
