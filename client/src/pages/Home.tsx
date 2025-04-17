@@ -46,6 +46,17 @@ export default function Home() {
     <div className="bg-gray-50 min-h-screen flex flex-col">
       <Header />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow">
+        <div className="mb-6 p-4 bg-gradient-to-r from-red-900 to-black rounded-lg shadow-lg border border-red-800">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="mb-4 md:mb-0">
+              <h2 className="text-xl font-bold text-white mb-2">Join Our Logistics Network</h2>
+              <p className="text-gray-200">Are you a B2B or logistics company? Partner with Khimat to expand your reach and grow your business.</p>
+            </div>
+            <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full font-medium transition-colors">
+              Become a Partner
+            </button>
+          </div>
+        </div>
         <Hero />
         <ShipmentForm onCompare={submitCompare} />
         

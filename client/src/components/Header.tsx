@@ -8,7 +8,7 @@ export default function Header() {
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <Link href="/">
-              <a className="text-primary text-2xl font-bold">ShipCompare</a>
+              <a className="text-primary text-2xl font-bold">Khimat</a>
             </Link>
             <span className="ml-2 text-xs bg-[#FF5A5F] text-white px-2 py-0.5 rounded-md">BETA</span>
           </div>
