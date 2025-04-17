@@ -35,8 +35,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const includeRecommendation = req.query.recommendation === "true";
       let recommendation = null;
       
+      console.log("Include AI recommendation:", includeRecommendation);
+      
       if (includeRecommendation) {
         try {
+          console.log("Generating AI recommendation for", compareRequest.origin, "to", compareRequest.destination);
+          
           recommendation = await generateRecommendation(
             results,
             compareRequest.origin,
@@ -44,6 +48,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             compareRequest.weight,
             compareRequest.weightUnit
           );
+          
+          console.log("AI recommendation result:", recommendation ? "Success" : "Null");
         } catch (aiError) {
           console.error("Error generating AI recommendation:", aiError);
           // Continue without recommendation if there's an error

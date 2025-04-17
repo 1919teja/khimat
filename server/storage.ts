@@ -92,7 +92,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     maxDays: 6,
     serviceType: "Economy",
     description: "Low-cost delivery for non-urgent shipments",
-    hasInsurance: false
+    hasInsurance: false,
+    insuranceType: ""
   },
   {
     id: 8,

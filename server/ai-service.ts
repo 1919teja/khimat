@@ -34,8 +34,13 @@ export async function generateRecommendation(
 ): Promise<AIRecommendation | null> {
   try {
     if (!options || options.length === 0) {
+      console.log("No options provided for AI recommendation");
       return null;
     }
+    
+    console.log(`API Key available: ${process.env.GOOGLE_API_KEY ? 'Yes' : 'No'}`);
+    console.log(`Available options for AI: ${options.length}`);
+    console.log(`Using Gemini model: gemini-1.5-flash`);
 
     // Create a prompt for the AI
     const prompt = `
@@ -76,18 +81,34 @@ export async function generateRecommendation(
     `;
 
     // Generate content from the model
+    console.log("Sending request to Google Gemini AI...");
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
+    
+    console.log("Received response from Gemini AI");
+    console.log("Response text length:", text.length);
     
     // Extract the JSON object from the response
     // The response might contain markdown formatting or additional text
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     
     if (jsonMatch) {
+      console.log("Found JSON in AI response");
       const jsonText = jsonMatch[0];
-      const recommendation = JSON.parse(jsonText) as AIRecommendation;
-      return recommendation;
+      
+      try {
+        const recommendation = JSON.parse(jsonText) as AIRecommendation;
+        console.log("Successfully parsed AI recommendation:", recommendation.bestOption.name);
+        return recommendation;
+      } catch (jsonError) {
+        console.error("Error parsing JSON from AI response:", jsonError);
+        console.log("JSON text:", jsonText);
+        return null;
+      }
+    } else {
+      console.log("No JSON found in AI response");
+      console.log("AI response text (truncated):", text.substring(0, 200) + "...");
     }
     
     return null;
