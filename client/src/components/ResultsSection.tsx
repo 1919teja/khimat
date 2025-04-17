@@ -9,9 +9,18 @@ interface ResultsSectionProps {
   onFilter: (provider: string) => void;
   selectedSort: string;
   selectedFilter: string;
+  selectedOptionId?: number | null;
 }
 
-export default function ResultsSection({ results, isLoading, onSort, onFilter, selectedSort, selectedFilter }: ResultsSectionProps) {
+export default function ResultsSection({ 
+  results, 
+  isLoading, 
+  onSort, 
+  onFilter, 
+  selectedSort, 
+  selectedFilter,
+  selectedOptionId 
+}: ResultsSectionProps) {
   const LoadingSkeleton = () => (
     <div className="bg-white rounded-xl shadow mb-4 p-4 animate-pulse">
       <div className="flex flex-col sm:flex-row gap-4">
@@ -102,7 +111,18 @@ export default function ResultsSection({ results, isLoading, onSort, onFilter, s
         <div id="results-container">
           {results.length > 0 ? (
             results.map((option, index) => (
-              <ResultCard key={index} option={option} isBestValue={index === 0} />
+              <ResultCard 
+                key={index} 
+                option={option} 
+                isBestValue={
+                  // If there's a selected option, mark it as best value
+                  selectedOptionId 
+                    ? option.id === selectedOptionId 
+                    // Otherwise use the first one as best value
+                    : index === 0
+                } 
+                isRecommended={option.id === selectedOptionId}
+              />
             ))
           ) : (
             <NoResults />
