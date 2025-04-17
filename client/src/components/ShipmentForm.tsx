@@ -25,44 +25,26 @@ const indianCities: City[] = [
 
 // International cities for autocomplete
 const internationalCities: City[] = [
-  // North America
   { name: "New York", state: "NY, USA" },
   { name: "Los Angeles", state: "CA, USA" },
   { name: "Chicago", state: "IL, USA" },
-  { name: "Toronto", state: "Ontario, Canada" },
-  { name: "Vancouver", state: "BC, Canada" },
-  { name: "Mexico City", state: "Mexico" },
-  
-  // Europe
-  { name: "London", state: "United Kingdom" },
+  { name: "Houston", state: "TX, USA" },
+  { name: "London", state: "UK" },
   { name: "Paris", state: "France" },
   { name: "Berlin", state: "Germany" },
-  { name: "Amsterdam", state: "Netherlands" },
-  { name: "Madrid", state: "Spain" },
-  { name: "Rome", state: "Italy" },
-  { name: "Vienna", state: "Austria" },
-  
-  // Asia
   { name: "Tokyo", state: "Japan" },
+  { name: "Sydney", state: "Australia" },
   { name: "Singapore", state: "Singapore" },
   { name: "Dubai", state: "UAE" },
+  { name: "Toronto", state: "Canada" },
+  { name: "Vancouver", state: "Canada" },
   { name: "Shanghai", state: "China" },
   { name: "Hong Kong", state: "China" },
-  { name: "Seoul", state: "South Korea" },
   { name: "Bangkok", state: "Thailand" },
   { name: "Kuala Lumpur", state: "Malaysia" },
-  { name: "Jakarta", state: "Indonesia" },
-  
-  // Australia & Pacific
-  { name: "Sydney", state: "NSW, Australia" },
-  { name: "Melbourne", state: "VIC, Australia" },
-  { name: "Auckland", state: "New Zealand" },
-  
-  // Middle East
-  { name: "Dubai", state: "UAE" },
-  { name: "Abu Dhabi", state: "UAE" },
-  { name: "Doha", state: "Qatar" },
-  { name: "Riyadh", state: "Saudi Arabia" }
+  { name: "Seoul", state: "South Korea" },
+  { name: "Amsterdam", state: "Netherlands" },
+  { name: "Madrid", state: "Spain" }
 ];
 
 // Combine all cities
