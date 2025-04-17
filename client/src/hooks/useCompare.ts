@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { ShipmentFormData, LogisticsOption } from '@/types';
+import { ShipmentFormData, LogisticsOption, AIRecommendation } from '@/types';
 import { apiRequest } from '@/lib/queryClient';
 
 export function useCompare() {
   const [compareResults, setCompareResults] = useState<LogisticsOption[]>([]);
+  const [aiRecommendation, setAiRecommendation] = useState<AIRecommendation | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingRecommendation, setIsLoadingRecommendation] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [selectedSort, setSelectedSort] = useState('price_low');
   const [selectedFilter, setSelectedFilter] = useState('all');
@@ -12,8 +14,10 @@ export function useCompare() {
 
   const submitCompare = async (formData: ShipmentFormData) => {
     setIsLoading(true);
+    setIsLoadingRecommendation(true);
     setShowResults(true);
     setLastQuery(formData);
+    setAiRecommendation(null);
     
     try {
       // Scroll to results section
@@ -27,17 +31,28 @@ export function useCompare() {
         }
       }, 100);
 
-      const response = await apiRequest('POST', '/api/compare', formData);
+      // Include recommendation=true to get AI recommendation with the results
+      const response = await apiRequest('POST', '/api/compare?recommendation=true', formData);
       const data = await response.json();
       
-      // Sort the results based on currently selected sort option
-      const sortedResults = sortResultsBy(data, selectedSort);
-      setCompareResults(sortedResults);
+      if (data.options) {
+        // Sort the results based on currently selected sort option
+        const sortedResults = sortResultsBy(data.options, selectedSort);
+        setCompareResults(sortedResults);
+      } else {
+        setCompareResults([]);
+      }
+
+      // Set the AI recommendation if available
+      if (data.recommendation) {
+        setAiRecommendation(data.recommendation);
+      }
     } catch (error) {
       console.error('Error fetching comparison results:', error);
       setCompareResults([]);
     } finally {
       setIsLoading(false);
+      setIsLoadingRecommendation(false);
     }
   };
 
@@ -66,7 +81,11 @@ export function useCompare() {
       if (lastQuery) {
         const response = await apiRequest('POST', `/api/compare?sort=${sortBy}&filter=${selectedFilter}`, lastQuery);
         const data = await response.json();
-        setCompareResults(data);
+        if (data.options) {
+          setCompareResults(data.options);
+        } else {
+          setCompareResults(data);
+        }
       } else {
         // If there's no previous query, just sort the current results
         setCompareResults(sortResultsBy(compareResults, sortBy));
@@ -86,7 +105,11 @@ export function useCompare() {
       if (lastQuery) {
         const response = await apiRequest('POST', `/api/compare?sort=${selectedSort}&filter=${provider}`, lastQuery);
         const data = await response.json();
-        setCompareResults(data);
+        if (data.options) {
+          setCompareResults(data.options);
+        } else {
+          setCompareResults(data);
+        }
       }
     } catch (error) {
       console.error('Error filtering results:', error);
@@ -95,12 +118,46 @@ export function useCompare() {
     }
   };
 
+  // Get a new AI recommendation
+  const refreshRecommendation = async () => {
+    if (!lastQuery) return;
+    
+    setIsLoadingRecommendation(true);
+    
+    try {
+      const response = await apiRequest('POST', '/api/recommend', lastQuery);
+      const data = await response.json();
+      
+      if (data.recommendation) {
+        setAiRecommendation(data.recommendation);
+      }
+    } catch (error) {
+      console.error('Error fetching AI recommendation:', error);
+    } finally {
+      setIsLoadingRecommendation(false);
+    }
+  };
+
+  // Find the recommended option in the results list
+  const getRecommendedOption = () => {
+    if (!aiRecommendation) return null;
+    
+    return compareResults.find(option => 
+      option.id === aiRecommendation.bestOption.id && 
+      option.provider === aiRecommendation.bestOption.provider
+    );
+  };
+
   return {
     compareResults,
+    aiRecommendation,
     isLoading,
+    isLoadingRecommendation,
     submitCompare,
     sortResults,
     filterResults,
+    refreshRecommendation,
+    getRecommendedOption,
     selectedSort,
     selectedFilter,
     showResults

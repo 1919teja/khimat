@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { compareRequestSchema } from "@shared/schema";
 import { z } from "zod";
+import { generateRecommendation } from "./ai-service";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Compare API endpoint
@@ -23,10 +24,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const compareRequest = parsedBody.data;
       const results = await storage.compareOptions(compareRequest, sortBy, filterProvider);
       
-      return res.json(results);
+      // Generate AI recommendation if requested
+      const includeRecommendation = req.query.recommendation === "true";
+      let recommendation = null;
+      
+      if (includeRecommendation) {
+        try {
+          recommendation = await generateRecommendation(
+            results,
+            compareRequest.origin,
+            compareRequest.destination,
+            compareRequest.weight,
+            compareRequest.weightUnit
+          );
+        } catch (aiError) {
+          console.error("Error generating AI recommendation:", aiError);
+          // Continue without recommendation if there's an error
+        }
+      }
+      
+      return res.json({
+        options: results,
+        recommendation
+      });
     } catch (error) {
       console.error("Error comparing options:", error);
       return res.status(500).json({ error: "Failed to compare shipping options" });
+    }
+  });
+
+  // AI Recommendation endpoint
+  app.post("/api/recommend", async (req, res) => {
+    try {
+      // Validate the request body using the schema
+      const parsedBody = compareRequestSchema.safeParse(req.body);
+      
+      if (!parsedBody.success) {
+        return res.status(400).json({ error: parsedBody.error.message });
+      }
+      
+      // Get the comparison results
+      const compareRequest = parsedBody.data;
+      const results = await storage.compareOptions(compareRequest);
+      
+      // Generate AI recommendation
+      const recommendation = await generateRecommendation(
+        results,
+        compareRequest.origin,
+        compareRequest.destination,
+        compareRequest.weight,
+        compareRequest.weightUnit
+      );
+      
+      return res.json({ recommendation });
+    } catch (error) {
+      console.error("Error generating recommendation:", error);
+      return res.status(500).json({ error: "Failed to generate AI recommendation" });
     }
   });
 

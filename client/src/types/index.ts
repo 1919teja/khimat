@@ -49,7 +49,24 @@ export interface CompareRequest {
   serviceType?: string;
 }
 
+// AI Recommendation interface
+export interface AIRecommendation {
+  bestOption: {
+    id: number;
+    name: string;
+    provider: string;
+  };
+  reasoning: string;
+  factors: {
+    price: string;
+    deliverySpeed: string;
+    reliability: string;
+    valueForMoney: string;
+  };
+}
+
 // Compare response structure
 export interface CompareResponse {
   options: LogisticsOption[];
+  recommendation?: AIRecommendation | null;
 }
