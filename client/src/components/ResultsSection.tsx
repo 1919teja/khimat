@@ -56,43 +56,52 @@ export default function ResultsSection({
   
   return (
     <div id="results-section" className="mb-8">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
-        <h2 className="text-xl font-semibold text-gray-800">
-          Shipping Options 
-          <span id="result-count" className="text-sm font-normal text-gray-500">
-            ({results.length} options found)
-          </span>
-        </h2>
-        
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full md:w-auto">
-          <div className="relative">
-            <Select value={selectedSort} onValueChange={onSort}>
-              <SelectTrigger className="w-full sm:w-48 appearance-none bg-white border border-gray-300 rounded-lg py-2 pl-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="price_low">Price: Low to High</SelectItem>
-                <SelectItem value="price_high">Price: High to Low</SelectItem>
-                <SelectItem value="time_fast">Delivery: Fastest</SelectItem>
-                <SelectItem value="time_slow">Delivery: Slowest</SelectItem>
-              </SelectContent>
-            </Select>
+      <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl p-4 mb-6 text-white">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+              <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"></path>
+              <path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9"></path>
+              <path d="M12 3v6"></path>
+            </svg>
+            <h2 className="text-xl font-semibold">
+              Logistics Options 
+              <span id="result-count" className="text-sm font-normal ml-2 text-gray-300">
+                ({results.length} options found)
+              </span>
+            </h2>
           </div>
           
-          <div className="relative">
-            <Select value={selectedFilter} onValueChange={onFilter}>
-              <SelectTrigger className="w-full sm:w-48 appearance-none bg-white border border-gray-300 rounded-lg py-2 pl-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
-                <SelectValue placeholder="Filter providers" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Providers</SelectItem>
-                <SelectItem value="delhivery">Delhivery</SelectItem>
-                <SelectItem value="bluedart">Blue Dart</SelectItem>
-                <SelectItem value="dtdc">DTDC</SelectItem>
-                <SelectItem value="fedex">FedEx</SelectItem>
-                <SelectItem value="ecom">Ecom Express</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full md:w-auto">
+            <div className="relative">
+              <Select value={selectedSort} onValueChange={onSort}>
+                <SelectTrigger className="w-full sm:w-48 appearance-none bg-white border border-gray-300 rounded-lg py-2 pl-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="price_low">Price: Low to High</SelectItem>
+                  <SelectItem value="price_high">Price: High to Low</SelectItem>
+                  <SelectItem value="time_fast">Delivery: Fastest</SelectItem>
+                  <SelectItem value="time_slow">Delivery: Slowest</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="relative">
+              <Select value={selectedFilter} onValueChange={onFilter}>
+                <SelectTrigger className="w-full sm:w-48 appearance-none bg-white border border-gray-300 rounded-lg py-2 pl-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                  <SelectValue placeholder="Filter providers" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Providers</SelectItem>
+                  <SelectItem value="delhivery">Delhivery</SelectItem>
+                  <SelectItem value="bluedart">Blue Dart</SelectItem>
+                  <SelectItem value="dtdc">DTDC</SelectItem>
+                  <SelectItem value="fedex">FedEx</SelectItem>
+                  <SelectItem value="ecom">Ecom Express</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
       </div>

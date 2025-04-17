@@ -9,15 +9,15 @@ interface ResultCardProps {
 
 export default function ResultCard({ option, isBestValue, isRecommended = false }: ResultCardProps) {
   return (
-    <div className={`bg-white rounded-xl shadow mb-4 overflow-hidden ${
+    <div className={`bg-white rounded-xl shadow-md mb-4 overflow-hidden transition-all hover:shadow-lg ${
       isRecommended 
-        ? 'border-2 border-blue-500 relative' 
+        ? 'border-2 border-indigo-500 relative ring-2 ring-indigo-200' 
         : isBestValue 
-          ? 'border-2 border-[#FF5A5F] relative' 
-          : ''
+          ? 'border-2 border-pink-500 relative' 
+          : 'border border-gray-100'
     }`}>
       {isRecommended ? (
-        <div className="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg flex items-center">
+        <div className="absolute top-0 right-0 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg flex items-center">
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             viewBox="0 0 24 24" 
@@ -37,7 +37,7 @@ export default function ResultCard({ option, isBestValue, isRecommended = false 
           AI RECOMMENDED
         </div>
       ) : isBestValue && (
-        <div className="absolute top-0 right-0 bg-[#FF5A5F] text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+        <div className="absolute top-0 right-0 bg-gradient-to-r from-pink-500 to-rose-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
           BEST VALUE
         </div>
       )}
@@ -76,9 +76,9 @@ export default function ResultCard({ option, isBestValue, isRecommended = false 
               variant={isRecommended || isBestValue ? "default" : "outline"} 
               className={`${
                 isRecommended 
-                  ? 'bg-blue-500 hover:bg-blue-600 text-white' 
+                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md' 
                   : isBestValue 
-                    ? 'bg-primary hover:bg-primary/90 text-white' 
+                    ? 'bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white shadow-md' 
                     : 'bg-white hover:bg-gray-50 text-primary border border-primary'
               } font-medium py-2 px-6 rounded-lg transition duration-150 ease-in-out w-full md:w-auto`}
             >
