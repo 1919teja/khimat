@@ -44,7 +44,7 @@ export async function generateRecommendation(
 
     // Create a prompt for the AI
     const prompt = `
-      I need your expert recommendation for shipping a package in India.
+      I need your expert recommendation for shipping a package globally from ${origin} to ${destination}.
       
       SHIPMENT DETAILS:
       - Origin: ${origin}
@@ -62,7 +62,8 @@ export async function generateRecommendation(
       `).join('\n')}
       
       Based on these options, please recommend the best choice and explain your reasoning. 
-      Consider factors like price, delivery speed, reliability based on the service description, and overall value for money.
+      Consider factors like price, delivery speed, reliability based on the service description, customs expertise for international shipments, and overall value for money.
+      If the shipping appears to be international, give preference to carriers with international expertise.
       Format your response as JSON with the following structure:
       {
         "bestOption": {

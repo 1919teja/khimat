@@ -4,6 +4,7 @@ import { eq, ilike, and, lt } from "drizzle-orm";
 
 // Sample logistics data for database seeding
 const LOGISTICS_DATA: LogisticsProvider[] = [
+  // Indian logistics providers
   {
     id: 1,
     name: "Delhivery",
@@ -107,6 +108,112 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     description: "Reliable delivery service with extensive reach in India",
     hasInsurance: true,
     insuranceType: "Basic Protection"
+  },
+  
+  // International Shipping Providers
+  {
+    id: 9,
+    name: "DHL International",
+    provider: "dhl",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/DHL_Logo.svg/2560px-DHL_Logo.svg.png",
+    price: 1249,
+    minDays: 3,
+    maxDays: 5,
+    serviceType: "International Express",
+    description: "Global delivery service with customs clearance and real-time tracking",
+    hasInsurance: true,
+    insuranceType: "Global Protection"
+  },
+  {
+    id: 10,
+    name: "UPS Worldwide",
+    provider: "ups",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/United_Parcel_Service_logo_2014.svg/2560px-United_Parcel_Service_logo_2014.svg.png",
+    price: 1399,
+    minDays: 2,
+    maxDays: 4,
+    serviceType: "International Premium",
+    description: "Premium international shipping with door-to-door service and guaranteed delivery times",
+    hasInsurance: true,
+    insuranceType: "Premium Global"
+  },
+  {
+    id: 11,
+    name: "FedEx International",
+    provider: "fedex",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/FedEx_Ground_logo.svg/2560px-FedEx_Ground_logo.svg.png",
+    price: 1499,
+    minDays: 1,
+    maxDays: 3,
+    serviceType: "International Priority",
+    description: "Time-definite international delivery with customs clearance and money-back guarantee",
+    hasInsurance: true,
+    insuranceType: "Global Premium"
+  },
+  {
+    id: 12,
+    name: "Aramex International",
+    provider: "aramex",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Aramex_logo.svg/2560px-Aramex_logo.svg.png",
+    price: 1189,
+    minDays: 4,
+    maxDays: 7,
+    serviceType: "International Standard",
+    description: "Reliable international shipping with good coverage in Middle East and Asian countries",
+    hasInsurance: true,
+    insuranceType: "Standard Protection"
+  },
+  {
+    id: 13,
+    name: "TNT Express",
+    provider: "tnt",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/TNT_Express_Logo.svg/2560px-TNT_Express_Logo.svg.png",
+    price: 1299,
+    minDays: 3,
+    maxDays: 6,
+    serviceType: "International Express",
+    description: "International express delivery service with good European coverage",
+    hasInsurance: true,
+    insuranceType: "Express Protection"
+  },
+  {
+    id: 14,
+    name: "DTDC International",
+    provider: "dtdc",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/DTDC_logo.svg/2560px-DTDC_logo.svg.png",
+    price: 999,
+    minDays: 5,
+    maxDays: 8,
+    serviceType: "International Economy",
+    description: "Affordable international shipping option for non-urgent deliveries",
+    hasInsurance: false,
+    insuranceType: ""
+  },
+  {
+    id: 15,
+    name: "DHL Economy Select",
+    provider: "dhl",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/DHL_Logo.svg/2560px-DHL_Logo.svg.png",
+    price: 949,
+    minDays: 6,
+    maxDays: 10,
+    serviceType: "International Economy",
+    description: "Cost-effective international shipping for less time-sensitive deliveries",
+    hasInsurance: true,
+    insuranceType: "Standard Protection"
+  },
+  {
+    id: 16,
+    name: "SF Express International",
+    provider: "sf",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/SF_Express_logo.svg/2560px-SF_Express_logo.svg.png",
+    price: 1099,
+    minDays: 3,
+    maxDays: 5,
+    serviceType: "International Express",
+    description: "Fast international delivery with excellent coverage in China and East Asia",
+    hasInsurance: true,
+    insuranceType: "Express Protection"
   }
 ];
 
@@ -121,6 +228,32 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
+  // Helper method to determine if a shipment is international
+  private isInternationalShipment(origin: string, destination: string): boolean {
+    // List of major Indian cities to check against
+    const indianCities = [
+      'mumbai', 'delhi', 'bangalore', 'hyderabad', 'chennai', 'kolkata', 
+      'pune', 'ahmedabad', 'jaipur', 'lucknow', 'kanpur', 'nagpur', 'indore', 
+      'thane', 'bhopal', 'visakhapatnam', 'pimpri-chinchwad', 'patna', 'vadodara', 
+      'ghaziabad', 'ludhiana', 'agra', 'nashik', 'faridabad', 'meerut', 'rajkot', 
+      'varanasi', 'srinagar', 'aurangabad', 'dhanbad', 'amritsar', 'navi mumbai', 
+      'allahabad', 'ranchi', 'howrah', 'coimbatore', 'jabalpur', 'gwalior', 'vijayawada', 
+      'jodhpur', 'madurai', 'raipur', 'kota', 'chandigarh', 'guwahati', 'solapur', 
+      'hubli', 'dharwad', 'bareilly', 'moradabad', 'mysore', 'gurgaon', 'aligarh', 
+      'warangal', 'dehradun'
+    ];
+    
+    // Check if origin and destination are both Indian cities
+    const originLower = origin.toLowerCase();
+    const destinationLower = destination.toLowerCase();
+    
+    const isOriginIndian = indianCities.some(city => originLower.includes(city));
+    const isDestinationIndian = indianCities.some(city => destinationLower.includes(city));
+    
+    // If both are Indian cities, it's a domestic shipment
+    // Otherwise, it's international
+    return !(isOriginIndian && isDestinationIndian);
+  }
   async initializeDatabase(): Promise<void> {
     // Check if we already have data in the database
     const existingProviders = await db.select().from(logisticsProviders);
@@ -148,7 +281,10 @@ export class DatabaseStorage implements IStorage {
     // First, get all providers
     let providers = await this.getAllProviders();
     
-    // Apply the same pricing algorithm as before
+    // Check if this is an international shipment
+    const isInternational = this.isInternationalShipment(compareRequest.origin, compareRequest.destination);
+    
+    // Apply pricing algorithm with international consideration
     let results = providers.map(provider => {
       // Make a copy of the provider to modify
       const modifiedProvider = { ...provider };
@@ -161,9 +297,22 @@ export class DatabaseStorage implements IStorage {
       // Base price from the database
       let adjustedPrice = modifiedProvider.price;
       
-      // Add 50 rupees per kg above 1kg
+      // For domestic shipments, filter out international providers
+      if (!isInternational && modifiedProvider.serviceType.toLowerCase().includes("international")) {
+        modifiedProvider.price = 999999; // Filter out later
+        return modifiedProvider;
+      }
+      
+      // For international shipments, filter out domestic-only providers
+      if (isInternational && !modifiedProvider.serviceType.toLowerCase().includes("international")) {
+        modifiedProvider.price = 999999; // Filter out later
+        return modifiedProvider;
+      }
+      
+      // Add appropriate fee per kg above 1kg - higher for international
       if (weightInKg > 1) {
-        adjustedPrice += Math.round((weightInKg - 1) * 50);
+        const perKgRate = isInternational ? 250 : 50; // ₹250 per kg for international, ₹50 for domestic
+        adjustedPrice += Math.round((weightInKg - 1) * perKgRate);
       }
 
       // Apply dimensional weight if provided
@@ -174,12 +323,14 @@ export class DatabaseStorage implements IStorage {
           ? length * width * height * 16.39
           : length * width * height;
         
-        // Volumetric weight formula: volume (cm³) / 5000
-        const volumetricWeight = volumeCm / 5000;
+        // Volumetric weight formula: volume (cm³) / 5000 for domestic, /6000 for international
+        const divisor = isInternational ? 6000 : 5000;
+        const volumetricWeight = volumeCm / divisor;
         
         // Use the greater of actual weight or volumetric weight
         if (volumetricWeight > weightInKg) {
-          adjustedPrice += Math.round((volumetricWeight - weightInKg) * 50);
+          const perKgRate = isInternational ? 250 : 50;
+          adjustedPrice += Math.round((volumetricWeight - weightInKg) * perKgRate);
         }
       }
 
