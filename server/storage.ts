@@ -273,6 +273,13 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(logisticsProviders);
   }
 
+  private isInternationalShipment(origin: string, destination: string): boolean {
+    const isIndianCity = (city: string) => {
+      return city.toLowerCase().includes("india");
+    };
+    return !isIndianCity(origin) || !isIndianCity(destination);
+  }
+
   async compareOptions(
     compareRequest: CompareRequest,
     sortBy: string = "price_low",
@@ -284,10 +291,27 @@ export class DatabaseStorage implements IStorage {
     // Check if this is an international shipment
     const isInternational = this.isInternationalShipment(compareRequest.origin, compareRequest.destination);
     
+    // Filter providers based on shipment type
+    providers = providers.filter(provider => {
+      if (isInternational) {
+        return provider.serviceType.toLowerCase().includes('international');
+      }
+      return !provider.serviceType.toLowerCase().includes('international');
+    });
+
     // Apply pricing algorithm with international consideration
     let results = providers.map(provider => {
-      // Make a copy of the provider to modify
       const modifiedProvider = { ...provider };
+      
+      // Adjust pricing for international shipments
+      if (isInternational) {
+        modifiedProvider.price = Math.ceil(provider.price * 2.5); // International shipping costs more
+        modifiedProvider.minDays += 2; // Add extra days for international shipping
+        modifiedProvider.maxDays += 4;
+      }
+      
+      return modifiedProvider;
+    }); };
 
       // Apply weight-based pricing adjustment
       const weightInKg = compareRequest.weightUnit === "g" 
