@@ -1,6 +1,8 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import * as schema from "@shared/schema";
+// OR if schema.ts is in a different directory:
+// import * as schema from './path/to/schema'; 
 import { neon, neonConfig } from '@neondatabase/serverless';
 import ws from 'ws';
 
@@ -30,8 +32,11 @@ else {
     console.error('Unexpected error on idle PostgreSQL client', err);
     process.exit(-1);
   });
+  
+  db = drizzle(pool, { schema });
+}
 
-
+export { db };
 
 
 
@@ -57,7 +62,7 @@ else {
 
 //   neonConfig.webSocketConstructor = ws;
   
-  db = drizzle(pool, { schema });
-}
+//   db = drizzle(pool, { schema });
+// }
 
-export { db };
+// export { db };
