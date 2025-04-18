@@ -1,5 +1,12 @@
+// At the top after imports
+import { db as neonDb } from './db';
+import { db as localDb } from './local-db';
+
+// Use appropriate DB based on environment
+const db = process.env.NODE_ENV === 'development' ? localDb : neonDb;
 import { CompareRequest, LogisticsProvider, logisticsProviders } from "@shared/schema";
-import { db } from "./db";
+//import { db } from "./db";
+
 import { eq, ilike, and, lt } from "drizzle-orm";
 
 // Sample logistics data for database seeding
@@ -16,7 +23,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "Express Delivery",
     description: "Doorstep pickup and delivery with real-time tracking",
     hasInsurance: true,
-    insuranceType: "Shipment Protection"
+    insuranceType: "Shipment Protection",
+    website: "https://www.delhivery.com/"
   },
   {
     id: 2,
@@ -29,7 +37,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "Standard Delivery",
     description: "Reliable delivery with package insurance up to ₹10,000",
     hasInsurance: true,
-    insuranceType: "Shipment Protection"
+    insuranceType: "Shipment Protection",
+    website: "https://www.bluedart.com/"
   },
   {
     id: 3,
@@ -42,7 +51,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "Standard Delivery",
     description: "Economical shipping option with wide coverage across India",
     hasInsurance: false,
-    insuranceType: ""
+    insuranceType: "",
+    website: "https://www.dtdc.com/"
   },
   {
     id: 4,
@@ -55,7 +65,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "Premium Express",
     description: "Priority handling with guaranteed delivery and comprehensive insurance",
     hasInsurance: true,
-    insuranceType: "Premium Insurance"
+    insuranceType: "Premium Insurance",
+    website: "https://www.fedex.com/"
   },
   {
     id: 5,
@@ -68,7 +79,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "Standard Delivery",
     description: "Cost-effective delivery solution with good coverage in tier 2 and 3 cities",
     hasInsurance: false,
-    insuranceType: ""
+    insuranceType: "",
+    website: "https://www.ecomexpress.in/"
   },
   {
     id: 6,
@@ -81,7 +93,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "Premium Express",
     description: "Ultra-fast delivery with priority handling and real-time tracking",
     hasInsurance: true,
-    insuranceType: "Premium Insurance"
+    insuranceType: "Premium Insurance",
+    website: "https://www.delhivery.com/"
   },
   {
     id: 7,
@@ -94,7 +107,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "Economy",
     description: "Low-cost delivery for non-urgent shipments",
     hasInsurance: false,
-    insuranceType: ""
+    insuranceType: "",
+    website: "https://www.tpcindia.com/"
   },
   {
     id: 8,
@@ -107,7 +121,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "Standard Delivery",
     description: "Reliable delivery service with extensive reach in India",
     hasInsurance: true,
-    insuranceType: "Basic Protection"
+    insuranceType: "Basic Protection",
+    website: "https://www.ekartlogistics.com/"
   },
   
   // International Shipping Providers
@@ -122,7 +137,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "International Express",
     description: "Global delivery service with customs clearance and real-time tracking",
     hasInsurance: true,
-    insuranceType: "Global Protection"
+    insuranceType: "Global Protection",
+    website: "https://www.dhl.com/"
   },
   {
     id: 10,
@@ -135,7 +151,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "International Premium",
     description: "Premium international shipping with door-to-door service and guaranteed delivery times",
     hasInsurance: true,
-    insuranceType: "Premium Global"
+    insuranceType: "Premium Global",
+    website: "https://www.ups.com/"
   },
   {
     id: 11,
@@ -148,7 +165,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "International Priority",
     description: "Time-definite international delivery with customs clearance and money-back guarantee",
     hasInsurance: true,
-    insuranceType: "Global Premium"
+    insuranceType: "Global Premium",
+    website: "https://www.fedex.com/"
   },
   {
     id: 12,
@@ -161,7 +179,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "International Standard",
     description: "Reliable international shipping with good coverage in Middle East and Asian countries",
     hasInsurance: true,
-    insuranceType: "Standard Protection"
+    insuranceType: "Standard Protection",
+    website: "https://www.aramex.com/"
   },
   {
     id: 13,
@@ -174,7 +193,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "International Express",
     description: "International express delivery service with good European coverage",
     hasInsurance: true,
-    insuranceType: "Express Protection"
+    insuranceType: "Express Protection",
+    website: "https://www.tnt.com/"
   },
   {
     id: 14,
@@ -187,7 +207,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "International Economy",
     description: "Affordable international shipping option for non-urgent deliveries",
     hasInsurance: false,
-    insuranceType: ""
+    insuranceType: "",
+    website: "https://www.dtdc.in/international-service.asp"
   },
   {
     id: 15,
@@ -200,7 +221,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "International Economy",
     description: "Cost-effective international shipping for less time-sensitive deliveries",
     hasInsurance: true,
-    insuranceType: "Standard Protection"
+    insuranceType: "Standard Protection",
+    website: "https://www.dhl.com/global-en/home/our-divisions/freight/customer-service/dhl-economy-select.html"
   },
   {
     id: 16,
@@ -213,7 +235,8 @@ const LOGISTICS_DATA: LogisticsProvider[] = [
     serviceType: "International Express",
     description: "Fast international delivery with excellent coverage in China and East Asia",
     hasInsurance: true,
-    insuranceType: "Express Protection"
+    insuranceType: "Express Protection",
+    website: "https://www.sf-international.com/us/en/"
   }
 ];
 
@@ -225,6 +248,7 @@ export interface IStorage {
     filterProvider?: string
   ): Promise<LogisticsProvider[]>;
   initializeDatabase(): Promise<void>;
+  updateProviderWebsites(): Promise<void>; // Add this to the interface
 }
 
 export class DatabaseStorage implements IStorage {
@@ -254,6 +278,37 @@ export class DatabaseStorage implements IStorage {
     // Otherwise, it's international
     return !(isOriginIndian && isDestinationIndian);
   }
+
+  async updateProviderWebsites(): Promise<void> {
+    // Define website mappings with clean URLs (removed extra spaces)
+    const websiteMap = {
+      "DHL Economy Select": "https://www.dhl.com/global-en/home/our-divisions/freight/customer-service/dhl-economy-select.html",
+      "DTDC International": "https://www.dtdc.in/international-service.asp",
+      "SF Express International": "https://www.sf-international.com/us/en/",
+      "DHL International": "https://www.dhl.com/global-en/home.html",
+      "UPS Worldwide": "https://www.ups.com/",
+      "FedEx International": "https://www.fedex.com/en-in/home.html",
+      "Aramex International": "https://www.aramex.com/",
+      "TNT Express": "https://www.tnt.com/",
+      "DTDC": "https://www.dtdc.com/",
+      "FedEx": "https://www.fedex.com/",
+      "Delhivery": "https://www.delhivery.com/",
+      "Blue Dart": "https://www.bluedart.com/",
+      "Ecom Express": "https://www.ecomexpress.in/",
+      "Professional Couriers": "https://www.tpcindia.com/",
+      "Ekart Logistics": "https://www.ekartlogistics.com/"
+    };
+  
+    // Update each provider
+    for (const [name, website] of Object.entries(websiteMap)) {
+      await db.update(logisticsProviders)
+        .set({ website })
+        .where(eq(logisticsProviders.name, name));
+    }
+    
+    console.log("Updated provider websites");
+  }
+
   async initializeDatabase(): Promise<void> {
     // Check if we already have data in the database
     const existingProviders = await db.select().from(logisticsProviders);
@@ -266,6 +321,8 @@ export class DatabaseStorage implements IStorage {
       console.log("Database seeding complete.");
     } else {
       console.log(`Database already contains ${existingProviders.length} providers.`);
+      // Update existing records with website URLs
+      await this.updateProviderWebsites();
     }
   }
 
@@ -340,45 +397,38 @@ export class DatabaseStorage implements IStorage {
         if (!modifiedProvider.serviceType.toLowerCase().includes(compareRequest.serviceType.toLowerCase())) {
           // Mark with very high price to filter out later
           modifiedProvider.price = 999999;
+          return modifiedProvider;
         }
       }
-      
-      // Set the adjusted price
+
+      // Update the price
       modifiedProvider.price = adjustedPrice;
-      
       return modifiedProvider;
     });
 
-    // Filter by provider if specified
+    // Filter out any providers marked for exclusion (those with price 999999)
+    results = results.filter(provider => provider.price < 999999);
+
+    // Apply provider filter if specified
     if (filterProvider && filterProvider !== 'all') {
       results = results.filter(provider => 
         provider.provider.toLowerCase() === filterProvider.toLowerCase()
       );
     }
 
-    // Filter out any providers that were marked with very high price
-    results = results.filter(provider => provider.price < 999999);
-
-    // Sort results based on the sort criteria
-    switch (sortBy) {
-      case 'price_low':
-        results.sort((a, b) => a.price - b.price);
-        break;
-      case 'price_high':
-        results.sort((a, b) => b.price - a.price);
-        break;
-      case 'time_fast':
-        results.sort((a, b) => (a.minDays + a.maxDays) / 2 - (b.minDays + b.maxDays) / 2);
-        break;
-      case 'time_slow':
-        results.sort((a, b) => (b.minDays + b.maxDays) / 2 - (a.minDays + a.maxDays) / 2);
-        break;
-      default:
-        results.sort((a, b) => a.price - b.price);
+    // Sort the results
+    if (sortBy === 'price_low') {
+      results.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'price_high') {
+      results.sort((a, b) => b.price - a.price);
+    } else if (sortBy === 'time_fastest') {
+      results.sort((a, b) => a.minDays - b.minDays);
+    } else if (sortBy === 'time_slowest') {
+      results.sort((a, b) => b.minDays - a.minDays);
     }
 
     return results;
   }
 }
-
 export const storage = new DatabaseStorage();
+ 

@@ -2,7 +2,10 @@
 export interface City {
   name: string;
   state: string;
+  website?: string; // Add this line - note the ? makes it optional
+
 }
+
 
 // Shipment form data structure
 export interface ShipmentFormData {
@@ -17,6 +20,8 @@ export interface ShipmentFormData {
     height: number;
     unit: string;
   } | null;
+  website?: string; // Add this line - note the ? makes it optional
+
 }
 
 // Logistics option structure
@@ -32,6 +37,8 @@ export interface LogisticsOption {
   insuranceType?: string;
   logoUrl: string;
   provider: string;
+  website?: string; // Add this line - note the ? makes it optional
+
 }
 
 // Compare request structure
@@ -47,6 +54,8 @@ export interface CompareRequest {
     unit: string;
   };
   serviceType?: string;
+  website?: string; // Add this line - note the ? makes it optional
+
 }
 
 // AI Recommendation interface
@@ -63,10 +72,14 @@ export interface AIRecommendation {
     reliability: string;
     valueForMoney: string;
   };
+  website?: string; // Add this line - note the ? makes it optional
+
 }
 
 // Compare response structure
 export interface CompareResponse {
   options: LogisticsOption[];
   recommendation?: AIRecommendation | null;
+  website?: string; // Add this line - note the ? makes it optional
+
 }

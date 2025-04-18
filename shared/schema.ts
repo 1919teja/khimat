@@ -48,7 +48,9 @@ export const logisticsProviders = pgTable("logistics_providers", {
   description: text("description").notNull(),
   hasInsurance: boolean("has_insurance").default(false),
   insuranceType: text("insurance_type").notNull().default(""),
+  website: text("website"), // Add this line for the website URL
 });
+
 
 // Compare Request Schema
 export const compareRequestSchema = z.object({

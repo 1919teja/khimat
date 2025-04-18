@@ -8,6 +8,18 @@ interface ResultCardProps {
 }
 
 export default function ResultCard({ option, isBestValue, isRecommended = false }: ResultCardProps) {
+  // Add this function to handle the website redirection
+  const handleSelectProvider = () => {
+    if (option.website) {
+      // Open the provider's website in a new tab
+      window.open(option.website, '_blank', 'noopener,noreferrer');
+    } else {
+      // Show a message if no website is available
+      alert("This provider's website is not currently available.");
+      // You could also use a toast notification if you have one in your UI
+    }
+  };
+
   return (
     <div className={`bg-white rounded-xl shadow-md mb-4 overflow-hidden transition-all hover:shadow-lg ${
       isRecommended 
@@ -73,6 +85,7 @@ export default function ResultCard({ option, isBestValue, isRecommended = false 
             <div className="text-2xl font-bold text-gray-800">₹{option.price}</div>
             <div className="text-xs text-gray-500 mb-3">incl. all taxes</div>
             <Button 
+              onClick={handleSelectProvider}
               variant={isRecommended || isBestValue ? "default" : "outline"} 
               className={`${
                 isRecommended 

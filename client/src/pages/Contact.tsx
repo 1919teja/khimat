@@ -40,18 +40,18 @@ export default function Contact() {
               <div className="space-y-4">
                 <div>
                   <h3 className="font-medium">Email</h3>
-                  <p className="text-blue-600">support@shipcompare.com</p>
+                  <p className="text-blue-600">support@khimat.com</p>
                 </div>
                 <div>
                   <h3 className="font-medium">Phone</h3>
-                  <p className="text-blue-600">+91 98765 43210</p>
+                  <p className="text-blue-600">+91 9581876090</p>
                 </div>
                 <div>
                   <h3 className="font-medium">Address</h3>
                   <p className="text-gray-600">
-                    123 Logistics Hub<br />
-                    Tech Park, Bengaluru<br />
-                    Karnataka, India 560001
+                    Hitech City <br />
+                     Tech Park, Hyderabad <br />
+                    Telangana, India 506003
                   </p>
                 </div>
               </div>
