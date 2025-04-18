@@ -1,0 +1,52 @@
+    1  sudo apt update
+    2  sudo apt upgrade -y
+    3  curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+    4  sudo apt install -y nodejs
+    5  node -v  # Should display v18.x.x
+    6  npm -v   # Should display npm version
+    7  sudo apt install git -y
+    8  sudo apt install postgresql-client -y
+    9  git clone https://github.com/1919teja/khimat.git
+   10  npm install
+   11  cd khimat/
+   12  npm install
+   13  ls
+   14  git branch 
+   15  git branchs
+   16  switch branch main 
+   17  git branch -m master main
+   18  git branch 
+   19  npm install
+   20  ls
+   21  git branch 
+   22  ls
+   23  cd ..
+   24  rm -rf khimat/
+   25  ls
+   26  rm package-lock.json 
+   27  ls
+   28  git clone https://github.com/1919teja/khimat.git
+   29  git branch -m master main
+   30  cd khimat/
+   31  git branch -m master main
+   33  git pull
+   43  git clone https://github.com/1919teja/khimat.git
+   45  cd khimat/
+   47  npm install
+   50  sudo apt install postgresql-client -y
+   53  sudo apt install postgresql postgresql-contrib -y
+   54  sudo systemctl start postgresql
+   55  sudo systemctl enable postgresql
+   56  # Switch to postgres user
+   57  sudo -i -u postgres
+   58  # Create a database user (replace 'yourappuser' with desired username)
+   59  createuser --interactive --pwprompt
+   60  # Enter name of role to add: yourappuser
+   61  # Enter password for new role: (enter a secure password)
+   62  # Enter it again: (confirm password)
+   63  # Shall the new role be a superuser? (y/n): n
+   64  # Shall the new role be allowed to create databases? (y/n): y
+   65  # Shall the new role be allowed to create more new roles? (y/n): n
+   66  # Create a database for your application
+   67  createdb worldquestrealm -O yourappuser
+   68  # Exit postgres user shell
